@@ -26,13 +26,20 @@ export class GameManager {
     this.inputManager = new InputManager();
     this.player = new Player(this.inputManager);
     this.structureLayer.addChild(this.player.getPlayerSprite());
+
+    setTimeout(() => {
+      this.adjustMapPosition(
+        this.player.getPlayerSprite().x,
+        this.player.getPlayerSprite().y
+      );
+    }, 1000);
   }
 
   private checkStructureCollision(x: number, y: number): boolean {
     const tileSize = this.tileManager.getMap().tilewidth;
     const tileLayer = this.tileManager
       .getMap()
-      .layers.find((layer: any) => layer.name === 'Tile Layer 2');
+      .layers.find((layer: any) => layer.name === 'Tile Layer 3');
 
     if (tileLayer) {
       const data = tileLayer.data;
@@ -67,12 +74,40 @@ export class GameManager {
       const prevY = playerSprite.y;
 
       this.player.handlePlayerMovement();
+      this.adjustMapPosition(playerSprite.x, playerSprite.y);
 
       if (this.checkStructureCollision(playerSprite.x, playerSprite.y)) {
         playerSprite.x = prevX;
         playerSprite.y = prevY;
       }
     }
+  }
+
+  private adjustMapPosition(playerX: number, playerY: number): void {
+    const screenWidth = this.app.renderer.screen.width;
+    const screenHeight = this.app.renderer.screen.height;
+    const mapWidth =
+      this.tileManager.getMap().width * this.tileManager.getMap().tilewidth; // Total width of the map
+    const mapHeight =
+      this.tileManager.getMap().height * this.tileManager.getMap().tileheight; // Total height of the map
+    const offsetX = screenWidth / 2; // Calculate the center of the screen horizontally
+    const offsetY = screenHeight / 2; // Calculate the center of the screen vertically
+
+    // Calculate the boundaries to prevent moving the camera outside of the map
+    const minX = offsetX;
+    const maxX = mapWidth - offsetX;
+    const minY = offsetY;
+    const maxY = mapHeight - offsetY;
+
+    // Calculate the new position for the map container
+    let newX = Math.min(Math.max(playerX, minX), maxX);
+    let newY = Math.min(Math.max(playerY, minY), maxY);
+
+    // Adjust the position of the map container
+    this.app.stage.position.set(
+      screenWidth / 2 - newX,
+      screenHeight / 2 - newY
+    );
   }
 
   private gameLoop(): void {

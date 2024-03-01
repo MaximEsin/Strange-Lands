@@ -1,0 +1,15 @@
+{
+  "columns": 15,
+  "image": "/Backgrounds/Shire/images/Trees.png",
+  "imageheight": 352,
+  "imagewidth": 240,
+  "margin": 0,
+  "name": "Trees",
+  "spacing": 0,
+  "tilecount": 330,
+  "tiledversion": "1.10.2",
+  "tileheight": 16,
+  "tilewidth": 16,
+  "type": "tileset",
+  "version": "1.10"
+}

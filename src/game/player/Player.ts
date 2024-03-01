@@ -4,7 +4,7 @@ import { InputManager } from '../managers/InputManager';
 export class Player {
   private inputManager: InputManager;
   private playerSprite: PIXI.Sprite;
-  private speed: number = 2;
+  private speed: number = 20;
 
   constructor(inputManager: InputManager) {
     this.inputManager = inputManager;
@@ -18,8 +18,8 @@ export class Player {
     const player = new PIXI.Sprite(playerTexture);
     player.scale.set(0.3);
     player.anchor.set(0.5);
-    player.x = 100;
-    player.y = 70;
+    player.x = 2400;
+    player.y = 550;
 
     return player;
   }

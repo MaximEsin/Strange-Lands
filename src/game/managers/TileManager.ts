@@ -15,10 +15,47 @@ export class TileManager {
 
   private loadAssets(): void {
     PIXI.Loader.shared
-      .add('map', '/Backgrounds/testmap.json')
-      .add('GrassJson', '/Backgrounds/Grass.json')
-      .add('TreeJson', '/Backgrounds/Tree.json')
+      .add('map', '/Backgrounds/Shire/tilesets/Shire.json')
+      .add('RoadJson', '/Backgrounds/Shire/tilesets/Road.json')
+      .add('HobbitHouseJson', '/Backgrounds/Shire/tilesets/HobbitHouse.json')
+      .add('TavernJson', '/Backgrounds/Shire/tilesets/Tavern.json')
+      .add('WaterJson', '/Backgrounds/Shire/tilesets/Water.json')
       .load(this.setup.bind(this));
+  }
+
+  private setup(
+    loader: PIXI.Loader,
+    resources: Partial<Record<string, PIXI.LoaderResource>>
+  ): void {
+    // Check if all resources are loaded successfully
+    if (
+      !resources.map ||
+      !resources.RoadJson ||
+      !resources.HobbitHouseJson ||
+      !resources.TavernJson ||
+      !resources.WaterJson
+    ) {
+      console.error('Failed to load resources.');
+      console.log(loader);
+      return;
+    }
+
+    // Load the map data
+    this.map = resources.map.data;
+
+    // Load tileset textures
+    const tilesets = this.map.tilesets;
+    for (const tileset of tilesets) {
+      const textureResource = resources[tileset.name];
+      if (!textureResource || !textureResource.data.image) {
+        console.error(`Failed to load texture for tileset: ${tileset.source}`);
+        continue;
+      }
+      const texture = PIXI.Texture.from(textureResource.data.image);
+      this.tilesets.push({ ...tileset, img: texture });
+    }
+
+    this.createMap();
   }
 
   private createMap(): void {
@@ -48,7 +85,7 @@ export class TileManager {
             const sprite = new PIXI.Sprite(texture);
             sprite.x = x * tileWidth;
             sprite.y = y * tileHeight;
-            if (gid < 25) {
+            if (gid < 661) {
               this.groundLayer.addChild(sprite);
             } else {
               this.structureLayer.addChild(sprite);
@@ -60,8 +97,6 @@ export class TileManager {
   }
 
   private getTileTexture(gid: number): PIXI.Texture | null {
-    console.log(this.map);
-    console.log(this.tilesets);
     for (const tileset of this.map.tilesets) {
       if (
         gid >= tileset.firstgid &&
@@ -90,37 +125,6 @@ export class TileManager {
       }
     }
     return null;
-  }
-
-  public setup(
-    loader: PIXI.Loader,
-    resources: Partial<Record<string, PIXI.LoaderResource>>
-  ): void {
-    // Check if all resources are loaded successfully
-    if (!resources.map || !resources.GrassJson || !resources.TreeJson) {
-      console.error('Failed to load resources.');
-      console.log(loader);
-      return;
-    }
-
-    // Load the map data
-    this.map = resources.map.data;
-
-    // Load tileset textures
-    const tilesets = this.map.tilesets;
-    console.log(this.tilesets);
-    for (const tileset of tilesets) {
-      const textureResource = resources[tileset.name];
-      if (!textureResource || !textureResource.data.image) {
-        console.error(`Failed to load texture for tileset: ${tileset.source}`);
-        continue;
-      }
-      console.log(this.tilesets);
-      const texture = PIXI.Texture.from(textureResource.data.image);
-      this.tilesets.push({ ...tileset, img: texture });
-    }
-
-    this.createMap();
   }
 
   public getMap() {
