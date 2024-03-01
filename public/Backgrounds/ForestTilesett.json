@@ -1,0 +1,15 @@
+{
+  "columns": 11,
+  "image": "/Backgrounds/ForestTilesett.png",
+  "imageheight": 320,
+  "imagewidth": 176,
+  "margin": 0,
+  "name": "ForestTilesett",
+  "spacing": 0,
+  "tilecount": 220,
+  "tiledversion": "1.10.2",
+  "tileheight": 16,
+  "tilewidth": 16,
+  "type": "tileset",
+  "version": "1.10"
+}
