@@ -21,9 +21,9 @@ export class Game {
 
   private loadAssets(): void {
     PIXI.Loader.shared
-      .add('map', '/Backgrounds/qq.json')
-      .add('forestJson', '/Backgrounds/ForestTilesett.json')
-      .add('treesJson', '/Backgrounds/Trees.json')
+      .add('map', '/Backgrounds/testmap.json')
+      .add('GrassJson', '/Backgrounds/Grass.json')
+      .add('TreeJson', '/Backgrounds/Tree.json')
       .load(this.setup.bind(this));
   }
 
@@ -32,7 +32,7 @@ export class Game {
     resources: Partial<Record<string, PIXI.LoaderResource>>
   ): void {
     // Check if all resources are loaded successfully
-    if (!resources.map || !resources.forestJson || !resources.treesJson) {
+    if (!resources.map || !resources.GrassJson || !resources.TreeJson) {
       console.error('Failed to load resources.');
       console.log(loader);
       return;
@@ -109,8 +109,8 @@ export class Game {
           return new PIXI.Texture(
             textureObject.img,
             new PIXI.Rectangle(
-              col * tileSize - 16,
-              row * tileSize + 96,
+              col * tileSize,
+              row * tileSize,
               tileSize,
               tileSize
             )

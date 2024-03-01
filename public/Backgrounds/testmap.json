@@ -1,0 +1,70 @@
+{
+  "compressionlevel": -1,
+  "height": 10,
+  "infinite": false,
+  "layers": [
+    {
+      "data": [
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1
+      ],
+      "height": 10,
+      "id": 1,
+      "name": "Tile Layer 1",
+      "opacity": 1,
+      "type": "tilelayer",
+      "visible": true,
+      "width": 10,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "data": [
+        25, 26, 27, 28, 37, 38, 39, 40, 25, 26, 29, 30, 31, 32, 41, 42, 43, 44,
+        29, 30, 33, 34, 35, 36, 45, 46, 47, 48, 33, 34, 37, 38, 39, 40, 0, 0, 0,
+        0, 37, 38, 41, 42, 43, 44, 0, 0, 0, 0, 41, 42, 45, 46, 47, 48, 0, 0, 0,
+        0, 45, 46, 25, 26, 27, 28, 25, 26, 27, 28, 25, 26, 29, 30, 31, 32, 29,
+        30, 31, 32, 29, 30, 33, 34, 35, 36, 33, 34, 35, 36, 33, 34, 37, 38, 39,
+        40, 37, 38, 39, 40, 37, 38
+      ],
+      "height": 10,
+      "id": 2,
+      "name": "Tile Layer 2",
+      "opacity": 1,
+      "type": "tilelayer",
+      "visible": true,
+      "width": 10,
+      "x": 0,
+      "y": 0
+    }
+  ],
+  "nextlayerid": 3,
+  "nextobjectid": 1,
+  "orientation": "orthogonal",
+  "renderorder": "right-down",
+  "tiledversion": "1.10.2",
+  "tileheight": 16,
+  "tilesets": [
+    {
+      "firstgid": 1,
+      "source": "Grass.json",
+      "tilecount": 24,
+      "columns": 4,
+      "name": "GrassJson"
+    },
+    {
+      "firstgid": 25,
+      "source": "Tree.json",
+      "columns": 4,
+      "tilecount": 24,
+      "name": "TreeJson"
+    }
+  ],
+  "tilewidth": 16,
+  "type": "map",
+  "version": "1.10",
+  "width": 10
+}
