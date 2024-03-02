@@ -2,10 +2,12 @@ import * as PIXI from 'pixi.js';
 import { InputManager } from '../managers/InputManager';
 import { Player } from '../player/Player';
 import { MapManager } from './MapManager';
+import { AnimationManager } from '../managers/AnimationManager';
 
 export class GameManager {
   private app: PIXI.Application;
   private inputManager: InputManager;
+  private animationManager: AnimationManager;
   private mapManager: MapManager;
   private player: Player;
   private groundLayer: PIXI.Container;
@@ -23,16 +25,17 @@ export class GameManager {
     this.app.stage.addChild(this.structureLayer);
 
     this.inputManager = new InputManager();
+    this.animationManager = new AnimationManager();
     this.mapManager = new MapManager(
       this.app,
       this.groundLayer,
       this.structureLayer
     );
-    this.player = new Player(this.inputManager);
+    this.player = new Player(this.inputManager, this.animationManager);
     this.structureLayer.addChild(this.player.getPlayerSprite());
   }
 
-  private playerMovement() {
+  private playerMotion() {
     const playerSprite = this.player.getPlayerSprite();
     if (
       this.inputManager.isKeyPressed('KeyW') ||
@@ -56,12 +59,14 @@ export class GameManager {
         playerSprite.x = prevX;
         playerSprite.y = prevY;
       }
+    } else {
+      this.player.handleStandingAnimation();
     }
   }
 
   private gameLoop(): void {
     this.app.renderer.render(this.app.stage);
-    this.playerMovement();
+    this.playerMotion();
   }
 
   start() {

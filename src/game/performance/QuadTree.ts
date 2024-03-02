@@ -154,6 +154,5 @@ export class QuadTree {
         this.maxDepth - 1
       )
     );
-    console.log(this.children[3].bounds);
   }
 }
