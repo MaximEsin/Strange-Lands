@@ -1,5 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { GameManager } from './game/gameCore/GameManager';
+import { StartScreen } from './game/Screens/StartScreen';
 
 export class App {
   private app: PIXI.Application;
@@ -21,5 +22,7 @@ export class App {
   }
 }
 
-const app = new App();
-app.start();
+window.onload = () => {
+  const startScreen = new StartScreen();
+  startScreen.init();
+};
