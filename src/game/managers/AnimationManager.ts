@@ -84,4 +84,20 @@ export class AnimationManager {
   public getPlayerMovingUpReverseAnimation(): PIXI.Texture[] {
     return this.createReverseAnimation('Player', 'moving', 44, 37);
   }
+
+  public getPlayerDaggerAttackRightAnimation(): PIXI.Texture[] {
+    return this.createAnimation('Player', 'daggerAttack', 1, 6);
+  }
+
+  public getPlayerDaggerAttackLeftAnimation(): PIXI.Texture[] {
+    return this.createAnimation('Player', 'daggerAttack', 7, 12);
+  }
+
+  public getPlayerDaggerAttackDownAnimation(): PIXI.Texture[] {
+    return this.createAnimation('Player', 'daggerAttack', 13, 18);
+  }
+
+  public getPlayerDaggerAttackUpAnimation(): PIXI.Texture[] {
+    return this.createAnimation('Player', 'daggerAttack', 19, 24);
+  }
 }

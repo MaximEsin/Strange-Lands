@@ -102,6 +102,7 @@ export class GameManager {
     this.app.renderer.render(this.app.stage);
     this.playerMotion();
     this.checkCharacterPaneToggle();
+    this.player.update();
   }
 
   start() {

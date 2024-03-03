@@ -19,7 +19,12 @@ export class Player {
   private movingLeftReverseAnimation: PIXI.Texture[];
   private movingDownReverseAnimation: PIXI.Texture[];
   private movingUpReverseAnimation: PIXI.Texture[];
+  private daggerRightAnimation: PIXI.Texture[];
+  private daggerLeftAnimation: PIXI.Texture[];
+  private daggerUpAnimation: PIXI.Texture[];
+  private daggerDownAnimation: PIXI.Texture[];
   private speed: number = 10;
+  private isAttackingWithDagger: boolean = false;
 
   constructor(
     app: PIXI.Application,
@@ -50,6 +55,15 @@ export class Player {
     this.movingDownAnimation =
       this.animationManager.getPlayerMovingDownAnimation();
     this.movingUpAnimation = this.animationManager.getPlayerMovingUpAnimation();
+
+    this.daggerRightAnimation =
+      this.animationManager.getPlayerDaggerAttackRightAnimation();
+    this.daggerLeftAnimation =
+      this.animationManager.getPlayerDaggerAttackLeftAnimation();
+    this.daggerUpAnimation =
+      this.animationManager.getPlayerDaggerAttackUpAnimation();
+    this.daggerDownAnimation =
+      this.animationManager.getPlayerDaggerAttackDownAnimation();
 
     this.playerSprite = this.createPlayer();
   }
@@ -124,22 +138,51 @@ export class Player {
     return direction;
   }
 
+  private handleDaggerAttack(): void {
+    const direction = this.calculateDirection();
+    switch (direction) {
+      case 'up':
+        this.playAnimation(this.daggerUpAnimation);
+        break;
+      case 'down':
+        this.playAnimation(this.daggerDownAnimation);
+        break;
+      case 'left':
+        this.playAnimation(this.daggerLeftAnimation);
+        break;
+      case 'right':
+        this.playAnimation(this.daggerRightAnimation);
+        break;
+    }
+  }
+
+  private handleDaggerAttackAction(): void {
+    if (this.inputManager.isMouseButtonPressed(2)) {
+      this.isAttackingWithDagger = true;
+      this.handleDaggerAttack();
+    } else {
+      this.isAttackingWithDagger = false;
+    }
+  }
+
   public handleStandingAnimation() {
     const direction = this.calculateDirection();
 
-    switch (direction) {
-      case 'up':
-        this.playAnimation(this.idleUpAnimation);
-        break;
-      case 'down':
-        this.playAnimation(this.idleDownAnimation);
-        break;
-      case 'left':
-        this.playAnimation(this.idleLeftAnimation);
-        break;
-      case 'right':
-        this.playAnimation(this.idleRightAnimation);
-        break;
+    if (!this.isAttackingWithDagger) {
+      switch (direction) {
+        case 'up':
+          this.playAnimation(this.idleUpAnimation);
+          break;
+        case 'down':
+          this.playAnimation(this.idleDownAnimation);
+          break;
+        case 'left':
+          this.playAnimation(this.idleLeftAnimation);
+          break;
+        case 'right':
+          this.playAnimation(this.idleRightAnimation);
+          break;
+      }
     }
   }
 
@@ -155,9 +198,13 @@ export class Player {
         !this.inputManager.isKeyPressed('KeyD')
       ) {
         if (direction === 'down') {
-          this.playAnimation(this.movingDownReverseAnimation);
+          if (!this.isAttackingWithDagger) {
+            this.playAnimation(this.movingDownReverseAnimation);
+          }
         } else {
-          this.playAnimation(this.movingUpAnimation);
+          if (!this.isAttackingWithDagger) {
+            this.playAnimation(this.movingUpAnimation);
+          }
         }
       }
     } else if (this.inputManager.isKeyPressed('KeyS')) {
@@ -169,9 +216,13 @@ export class Player {
         !this.inputManager.isKeyPressed('KeyD')
       ) {
         if (direction === 'up') {
-          this.playAnimation(this.movingUpReverseAnimation);
+          if (!this.isAttackingWithDagger) {
+            this.playAnimation(this.movingUpReverseAnimation);
+          }
         } else {
-          this.playAnimation(this.movingDownAnimation);
+          if (!this.isAttackingWithDagger) {
+            this.playAnimation(this.movingDownAnimation);
+          }
         }
       }
     }
@@ -179,21 +230,37 @@ export class Player {
     if (this.inputManager.isKeyPressed('KeyA')) {
       this.moveLeft();
       if (direction === 'right') {
-        this.playAnimation(this.movingRightReverseAnimation);
+        if (!this.isAttackingWithDagger) {
+          this.playAnimation(this.movingRightReverseAnimation);
+        }
       } else {
-        this.playAnimation(this.movingLeftAnimation);
+        if (!this.isAttackingWithDagger) {
+          this.playAnimation(this.movingLeftAnimation);
+        }
       }
     } else if (this.inputManager.isKeyPressed('KeyD')) {
       this.moveRight();
       if (direction === 'left') {
-        this.playAnimation(this.movingLeftReverseAnimation);
+        if (!this.isAttackingWithDagger) {
+          this.playAnimation(this.movingLeftReverseAnimation);
+        }
       } else {
-        this.playAnimation(this.movingRightAnimation);
+        if (!this.isAttackingWithDagger) {
+          this.playAnimation(this.movingRightAnimation);
+        }
       }
     }
   }
 
   public getPlayerSprite(): PIXI.Sprite {
     return this.playerSprite;
+  }
+
+  public getIsAttackingWithDagger(): boolean {
+    return this.isAttackingWithDagger;
+  }
+
+  public update() {
+    this.handleDaggerAttackAction();
   }
 }
