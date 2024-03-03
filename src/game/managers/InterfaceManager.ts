@@ -6,6 +6,8 @@ export class InterfaceManager {
   private playerData: PlayerData;
   private characterPaneSprite: PIXI.Sprite;
   private backgroundOverlay: PIXI.Container;
+  private miniUIOverlay: PIXI.Container;
+  private miniUI: PIXI.Sprite;
   private isOpen: boolean = false;
 
   constructor(app: PIXI.Application, playerData: PlayerData) {
@@ -14,10 +16,17 @@ export class InterfaceManager {
     this.characterPaneSprite = new PIXI.Sprite(
       PIXI.Texture.from('/UI/CharacterPane.png')
     );
+    this.miniUI = new PIXI.Sprite(PIXI.Texture.from('/UI/MiniUI.png'));
 
     // Create background overlay container
     this.backgroundOverlay = new PIXI.Container();
+    this.miniUIOverlay = new PIXI.Container();
+    this.app.stage.addChild(this.miniUIOverlay);
     this.app.stage.addChild(this.backgroundOverlay);
+
+    this.miniUI.x = this.app.screen.width * 0.01;
+    this.miniUI.y = this.app.screen.height * 0.75;
+    this.miniUIOverlay.addChild(this.miniUI);
 
     // Create background overlay
     const background = new PIXI.Graphics();
@@ -44,25 +53,85 @@ export class InterfaceManager {
     nameText.y = this.app.screen.height * 0.25;
     this.backgroundOverlay.addChild(nameText);
 
-    this.createText('Strength', this.playerData.strength, 0.41, 0.61);
-    this.createText('Health', this.playerData.health, 0.41, 0.66);
-    this.createText('Armor Value', this.playerData.armorValue, 0.41, 0.71);
-    this.createText('Stamina', this.playerData.stamina, 0.41, 0.76);
+    this.createText(
+      'Strength',
+      this.playerData.strength,
+      0.41,
+      0.61,
+      this.backgroundOverlay
+    );
+    this.createText(
+      'Health',
+      this.playerData.health,
+      0.41,
+      0.66,
+      this.backgroundOverlay
+    );
+    this.createText(
+      'Health',
+      this.playerData.health,
+      0.07,
+      0.79,
+      this.miniUIOverlay
+    );
+    this.createText(
+      'Armor Value',
+      this.playerData.armorValue,
+      0.41,
+      0.71,
+      this.backgroundOverlay
+    );
+    this.createText(
+      'Stamina',
+      this.playerData.stamina,
+      0.41,
+      0.76,
+      this.backgroundOverlay
+    );
+    this.createText(
+      'Stamina',
+      this.playerData.stamina,
+      0.07,
+      0.85,
+      this.miniUIOverlay
+    );
     this.createText(
       'Health Potions',
       this.playerData.healthPotionsAmount,
       0.57,
-      0.32
+      0.32,
+      this.backgroundOverlay
+    );
+    this.createText(
+      'Health Potions',
+      this.playerData.healthPotionsAmount,
+      0.08,
+      0.9,
+      this.miniUIOverlay
     );
 
     this.createText(
       'Stamina Potions',
       this.playerData.healthPotionsAmount,
       0.57,
-      0.37
+      0.37,
+      this.backgroundOverlay
+    );
+    this.createText(
+      'Stam Potions',
+      this.playerData.healthPotionsAmount,
+      0.08,
+      0.95,
+      this.miniUIOverlay
     );
 
-    this.createText('Coins', this.playerData.coinAmount, 0.57, 0.42);
+    this.createText(
+      'Coins',
+      this.playerData.coinAmount,
+      0.57,
+      0.42,
+      this.backgroundOverlay
+    );
 
     const gearText = new PIXI.Text('Current gear', {
       fontFamily: 'Halvetica',
@@ -83,7 +152,13 @@ export class InterfaceManager {
     background.on('pointerdown', () => this.toggleCharacterPane());
   }
 
-  private createText(text: string, data: number, x: number, y: number) {
+  private createText(
+    text: string,
+    data: number,
+    x: number,
+    y: number,
+    overlay: PIXI.Container
+  ) {
     const textToAdd = new PIXI.Text(`${text}: ${data}`, {
       fontFamily: 'Halvetica',
       fontSize: 16,
@@ -94,7 +169,7 @@ export class InterfaceManager {
     textToAdd.anchor.set(0.5);
     textToAdd.x = this.app.screen.width * x;
     textToAdd.y = this.app.screen.height * y;
-    this.backgroundOverlay.addChild(textToAdd);
+    overlay.addChild(textToAdd);
   }
 
   public toggleCharacterPane(): void {
@@ -104,5 +179,6 @@ export class InterfaceManager {
 
   public setPosition(x: number, y: number): void {
     this.backgroundOverlay.position.set(x, y);
+    this.miniUIOverlay.position.set(x, y);
   }
 }
