@@ -13,6 +13,7 @@ export class PlayerData {
   constructor() {
     this.staminaIncreaseInterval = setInterval(() => {
       this.increaseStamina(5);
+      this.staminaIncreaseInterval;
     }, 5000);
   }
 

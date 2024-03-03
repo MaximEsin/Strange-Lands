@@ -36,6 +36,7 @@ export class Player {
   private swordAttackStaminaCost: number = 5;
   private swordAttackStaminaPenalty: number = 1000;
   private lastPenaltyTimer: number = 0;
+  private ultimateAttackStaminaPenalty: number = 25;
 
   constructor(
     app: PIXI.Application,
@@ -232,6 +233,23 @@ export class Player {
             // Set the flag indicating that the player is attacking with a sword
             this.isAttackingWithSword = true;
           }
+        } else if (
+          this.inputManager.isKeyPressed('Space') &&
+          this.playerData.stamina >= this.ultimateAttackStaminaPenalty
+        ) {
+          if (
+            currentTime - this.lastPenaltyTimer >=
+            this.ultimateAttackStaminaPenalty
+          ) {
+            // Reduce stamina by the sword attack cost
+            this.playerData.stamina = this.ultimateAttackStaminaPenalty;
+            // Start the sword attack animation
+            this.handleUltimateAttack();
+            // Update the last penalty timer
+            this.lastPenaltyTimer = currentTime;
+            // Set the flag indicating that the player is attacking with a sword
+            this.isAttackingWithSword = true;
+          }
         }
       }
     } else {
@@ -244,6 +262,10 @@ export class Player {
         this.isAttackingWithSword = false;
       }
     }
+  }
+
+  public handleUltimateAttack() {
+    this.playAnimation(this.swordUltimateAnimation);
   }
 
   public handleStandingAnimation() {
