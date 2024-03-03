@@ -5,7 +5,7 @@ import { Player } from '../player/Player';
 
 export class MapManager {
   private app: PIXI.Application;
-  private tileManager: TileManager;
+  public tileManager: TileManager;
   private quadTree: QuadTree;
 
   constructor(

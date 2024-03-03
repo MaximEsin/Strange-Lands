@@ -3,6 +3,7 @@ import { InputManager } from '../managers/InputManager';
 import { AnimationManager } from '../managers/AnimationManager';
 
 export class Player {
+  private app: PIXI.Application;
   private inputManager: InputManager;
   private animationManager: AnimationManager;
   private playerSprite: PIXI.AnimatedSprite;
@@ -20,7 +21,12 @@ export class Player {
   private movingUpReverseAnimation: PIXI.Texture[];
   private speed: number = 10;
 
-  constructor(inputManager: InputManager, animationManager: AnimationManager) {
+  constructor(
+    app: PIXI.Application,
+    inputManager: InputManager,
+    animationManager: AnimationManager
+  ) {
+    this.app = app;
     this.inputManager = inputManager;
     this.animationManager = animationManager;
     this.idleRightAnimation =
@@ -51,8 +57,8 @@ export class Player {
   private createPlayer(): PIXI.AnimatedSprite {
     const playerTextures = this.idleDownAnimation;
     const player = new PIXI.AnimatedSprite(playerTextures);
-    player.x = 100;
-    player.y = 100;
+    player.x = this.app.screen.width / 2;
+    player.y = this.app.screen.height / 2;
     player.scale.set(1.2);
     player.anchor.set(0.5);
     player.animationSpeed = 0.1;
