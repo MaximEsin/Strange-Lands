@@ -100,4 +100,24 @@ export class AnimationManager {
   public getPlayerDaggerAttackUpAnimation(): PIXI.Texture[] {
     return this.createAnimation('Player', 'daggerAttack', 19, 24);
   }
+
+  public getPlayerSwordAttackRightAnimation(): PIXI.Texture[] {
+    return this.createAnimation('Player', 'swordAttack', 1, 10);
+  }
+
+  public getPlayerSwordAttackLeftAnimation(): PIXI.Texture[] {
+    return this.createAnimation('Player', 'swordAttack', 11, 20);
+  }
+
+  public getPlayerSwordAttackDownAnimation(): PIXI.Texture[] {
+    return this.createAnimation('Player', 'swordAttack', 21, 30);
+  }
+
+  public getPlayerSwordAttackUpAnimation(): PIXI.Texture[] {
+    return this.createAnimation('Player', 'swordAttack', 31, 40);
+  }
+
+  public getPlayerUltimateAttackAnimation(): PIXI.Texture[] {
+    return this.createAnimation('Player', 'swordAttack', 41, 44);
+  }
 }

@@ -1,11 +1,13 @@
 import * as PIXI from 'pixi.js';
 import { InputManager } from '../managers/InputManager';
 import { AnimationManager } from '../managers/AnimationManager';
+import { PlayerData } from './Data';
 
 export class Player {
   private app: PIXI.Application;
   private inputManager: InputManager;
   private animationManager: AnimationManager;
+  private playerData: PlayerData;
   private playerSprite: PIXI.AnimatedSprite;
   private idleRightAnimation: PIXI.Texture[];
   private idleLeftAnimation: PIXI.Texture[];
@@ -23,17 +25,28 @@ export class Player {
   private daggerLeftAnimation: PIXI.Texture[];
   private daggerUpAnimation: PIXI.Texture[];
   private daggerDownAnimation: PIXI.Texture[];
+  private swordRightAnimation: PIXI.Texture[];
+  private swordLeftAnimation: PIXI.Texture[];
+  private swordUpAnimation: PIXI.Texture[];
+  private swordDownAnimation: PIXI.Texture[];
+  private swordUltimateAnimation: PIXI.Texture[];
   private speed: number = 10;
   private isAttackingWithDagger: boolean = false;
+  private isAttackingWithSword: boolean = false;
+  private swordAttackStaminaCost: number = 5;
+  private swordAttackStaminaPenalty: number = 1000;
+  private lastPenaltyTimer: number = 0;
 
   constructor(
     app: PIXI.Application,
     inputManager: InputManager,
-    animationManager: AnimationManager
+    animationManager: AnimationManager,
+    playerData: PlayerData
   ) {
     this.app = app;
     this.inputManager = inputManager;
     this.animationManager = animationManager;
+    this.playerData = playerData;
     this.idleRightAnimation =
       this.animationManager.getPlayerIdleRightAnimation();
     this.idleLeftAnimation = this.animationManager.getPlayerIdleLeftAnimation();
@@ -64,6 +77,17 @@ export class Player {
       this.animationManager.getPlayerDaggerAttackUpAnimation();
     this.daggerDownAnimation =
       this.animationManager.getPlayerDaggerAttackDownAnimation();
+
+    this.swordRightAnimation =
+      this.animationManager.getPlayerSwordAttackRightAnimation();
+    this.swordLeftAnimation =
+      this.animationManager.getPlayerSwordAttackLeftAnimation();
+    this.swordUpAnimation =
+      this.animationManager.getPlayerSwordAttackUpAnimation();
+    this.swordDownAnimation =
+      this.animationManager.getPlayerSwordAttackDownAnimation();
+    this.swordUltimateAnimation =
+      this.animationManager.getPlayerUltimateAttackAnimation();
 
     this.playerSprite = this.createPlayer();
   }
@@ -156,32 +180,90 @@ export class Player {
     }
   }
 
+  private handleSwordAttack(): void {
+    const direction = this.calculateDirection();
+    switch (direction) {
+      case 'up':
+        this.playAnimation(this.swordUpAnimation);
+        break;
+      case 'down':
+        this.playAnimation(this.swordDownAnimation);
+        break;
+      case 'left':
+        this.playAnimation(this.swordLeftAnimation);
+        break;
+      case 'right':
+        this.playAnimation(this.swordRightAnimation);
+        break;
+    }
+  }
+
   private handleDaggerAttackAction(): void {
-    if (this.inputManager.isMouseButtonPressed(2)) {
-      this.isAttackingWithDagger = true;
-      this.handleDaggerAttack();
+    if (!this.isAttackingWithSword) {
+      if (this.inputManager.isMouseButtonPressed(2)) {
+        this.isAttackingWithDagger = true;
+        this.handleDaggerAttack();
+      } else {
+        this.isAttackingWithDagger = false;
+      }
+    }
+  }
+
+  private handleSwordAttackAction(): void {
+    const currentTime = Date.now();
+
+    // Check if the player is not already attacking with a sword
+    if (!this.isAttackingWithSword) {
+      // Check if the stamina is sufficient for the sword attack
+      if (this.playerData.stamina >= this.swordAttackStaminaCost) {
+        // Check if the left mouse button is pressed
+        if (this.inputManager.isMouseButtonPressed(0)) {
+          // Check if enough time has passed since the last stamina reduction
+          if (
+            currentTime - this.lastPenaltyTimer >=
+            this.swordAttackStaminaPenalty
+          ) {
+            // Reduce stamina by the sword attack cost
+            this.playerData.stamina = this.swordAttackStaminaCost;
+            // Start the sword attack animation
+            this.handleSwordAttack();
+            // Update the last penalty timer
+            this.lastPenaltyTimer = currentTime;
+            // Set the flag indicating that the player is attacking with a sword
+            this.isAttackingWithSword = true;
+          }
+        }
+      }
     } else {
-      this.isAttackingWithDagger = false;
+      // If the player is already attacking with a sword, check if it's time to stop
+      if (
+        currentTime - this.lastPenaltyTimer >=
+        this.swordAttackStaminaPenalty
+      ) {
+        // Reset the flag indicating that the player is attacking with a sword
+        this.isAttackingWithSword = false;
+      }
     }
   }
 
   public handleStandingAnimation() {
     const direction = this.calculateDirection();
-
-    if (!this.isAttackingWithDagger) {
-      switch (direction) {
-        case 'up':
-          this.playAnimation(this.idleUpAnimation);
-          break;
-        case 'down':
-          this.playAnimation(this.idleDownAnimation);
-          break;
-        case 'left':
-          this.playAnimation(this.idleLeftAnimation);
-          break;
-        case 'right':
-          this.playAnimation(this.idleRightAnimation);
-          break;
+    if (!this.isAttackingWithSword) {
+      if (!this.isAttackingWithDagger) {
+        switch (direction) {
+          case 'up':
+            this.playAnimation(this.idleUpAnimation);
+            break;
+          case 'down':
+            this.playAnimation(this.idleDownAnimation);
+            break;
+          case 'left':
+            this.playAnimation(this.idleLeftAnimation);
+            break;
+          case 'right':
+            this.playAnimation(this.idleRightAnimation);
+            break;
+        }
       }
     }
   }
@@ -198,12 +280,16 @@ export class Player {
         !this.inputManager.isKeyPressed('KeyD')
       ) {
         if (direction === 'down') {
-          if (!this.isAttackingWithDagger) {
-            this.playAnimation(this.movingDownReverseAnimation);
+          if (!this.isAttackingWithSword) {
+            if (!this.isAttackingWithDagger) {
+              this.playAnimation(this.movingDownReverseAnimation);
+            }
           }
         } else {
-          if (!this.isAttackingWithDagger) {
-            this.playAnimation(this.movingUpAnimation);
+          if (!this.isAttackingWithSword) {
+            if (!this.isAttackingWithDagger) {
+              this.playAnimation(this.movingUpAnimation);
+            }
           }
         }
       }
@@ -216,12 +302,16 @@ export class Player {
         !this.inputManager.isKeyPressed('KeyD')
       ) {
         if (direction === 'up') {
-          if (!this.isAttackingWithDagger) {
-            this.playAnimation(this.movingUpReverseAnimation);
+          if (!this.isAttackingWithSword) {
+            if (!this.isAttackingWithDagger) {
+              this.playAnimation(this.movingUpReverseAnimation);
+            }
           }
         } else {
-          if (!this.isAttackingWithDagger) {
-            this.playAnimation(this.movingDownAnimation);
+          if (!this.isAttackingWithSword) {
+            if (!this.isAttackingWithDagger) {
+              this.playAnimation(this.movingDownAnimation);
+            }
           }
         }
       }
@@ -230,23 +320,31 @@ export class Player {
     if (this.inputManager.isKeyPressed('KeyA')) {
       this.moveLeft();
       if (direction === 'right') {
-        if (!this.isAttackingWithDagger) {
-          this.playAnimation(this.movingRightReverseAnimation);
+        if (!this.isAttackingWithSword) {
+          if (!this.isAttackingWithDagger) {
+            this.playAnimation(this.movingRightReverseAnimation);
+          }
         }
       } else {
-        if (!this.isAttackingWithDagger) {
-          this.playAnimation(this.movingLeftAnimation);
+        if (!this.isAttackingWithSword) {
+          if (!this.isAttackingWithDagger) {
+            this.playAnimation(this.movingLeftAnimation);
+          }
         }
       }
     } else if (this.inputManager.isKeyPressed('KeyD')) {
       this.moveRight();
       if (direction === 'left') {
-        if (!this.isAttackingWithDagger) {
-          this.playAnimation(this.movingLeftReverseAnimation);
+        if (!this.isAttackingWithSword) {
+          if (!this.isAttackingWithDagger) {
+            this.playAnimation(this.movingLeftReverseAnimation);
+          }
         }
       } else {
-        if (!this.isAttackingWithDagger) {
-          this.playAnimation(this.movingRightAnimation);
+        if (!this.isAttackingWithSword) {
+          if (!this.isAttackingWithDagger) {
+            this.playAnimation(this.movingRightAnimation);
+          }
         }
       }
     }
@@ -256,11 +354,8 @@ export class Player {
     return this.playerSprite;
   }
 
-  public getIsAttackingWithDagger(): boolean {
-    return this.isAttackingWithDagger;
-  }
-
   public update() {
     this.handleDaggerAttackAction();
+    this.handleSwordAttackAction();
   }
 }

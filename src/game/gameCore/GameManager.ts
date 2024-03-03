@@ -43,7 +43,8 @@ export class GameManager {
     this.player = new Player(
       this.app,
       this.inputManager,
-      this.animationManager
+      this.animationManager,
+      this.playerData
     );
     this.structureLayer.addChild(this.player.getPlayerSprite());
 
@@ -103,6 +104,7 @@ export class GameManager {
     this.playerMotion();
     this.checkCharacterPaneToggle();
     this.player.update();
+    this.interfaceManager.updateStaminaText();
   }
 
   start() {
