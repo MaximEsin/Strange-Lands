@@ -185,7 +185,7 @@ export class InterfaceManager {
   public updateStaminaText() {
     const staminaText = this.backgroundOverlay.getChildAt(6) as PIXI.Text;
     staminaText.text = `Stamina: ${this.playerData.stamina}`;
-    const miniStaminaText = this.miniUIOverlay.getChildAt(4) as PIXI.Text;
+    const miniStaminaText = this.miniUIOverlay.getChildAt(2) as PIXI.Text;
     miniStaminaText.text = `Stamina: ${this.playerData.stamina}`;
   }
 }
