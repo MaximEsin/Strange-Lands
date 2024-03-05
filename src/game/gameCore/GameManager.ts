@@ -36,6 +36,7 @@ export class GameManager {
     this.mapManager = new MapManager(
       this.app,
       this.groundLayer,
+      this.faunaLayer,
       this.structureLayer
     );
     this.interfaceManager = new InterfaceManager(this.app, this.playerData);

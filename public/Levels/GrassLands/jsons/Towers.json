@@ -1,0 +1,15 @@
+{
+  "columns": 130,
+  "image": "/Levels/GrassLands/images/Towers.png",
+  "imageheight": 1600,
+  "imagewidth": 2080,
+  "margin": 0,
+  "name": "Towers",
+  "spacing": 0,
+  "tilecount": 13000,
+  "tiledversion": "1.10.2",
+  "tileheight": 16,
+  "tilewidth": 16,
+  "type": "tileset",
+  "version": "1.10"
+}

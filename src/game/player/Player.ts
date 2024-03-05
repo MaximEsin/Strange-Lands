@@ -96,8 +96,8 @@ export class Player {
   private createPlayer(): PIXI.AnimatedSprite {
     const playerTextures = this.idleDownAnimation;
     const player = new PIXI.AnimatedSprite(playerTextures);
-    player.x = this.app.screen.width / 2;
-    player.y = this.app.screen.height / 2;
+    player.x = this.app.screen.width / 2 + 50;
+    player.y = this.app.screen.height / 2 + 50;
     player.scale.set(1.2);
     player.anchor.set(0.5);
     player.animationSpeed = 0.1;

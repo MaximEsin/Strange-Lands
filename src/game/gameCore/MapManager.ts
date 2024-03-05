@@ -11,10 +11,11 @@ export class MapManager {
   constructor(
     app: PIXI.Application,
     groundLayer: PIXI.Container,
+    faunaLayer: PIXI.Container,
     structureLayer: PIXI.Container
   ) {
     this.app = app;
-    this.tileManager = new TileManager(groundLayer, structureLayer);
+    this.tileManager = new TileManager(groundLayer, faunaLayer, structureLayer);
     this.quadTree = new QuadTree(
       0,
       0,
@@ -34,7 +35,7 @@ export class MapManager {
       this.tileManager.getMap().width * this.tileManager.getMap().tilewidth;
     const mapHeight =
       this.tileManager.getMap().height * this.tileManager.getMap().tileheight;
-    this.quadTree = new QuadTree(0, 0, mapWidth, mapHeight, 10, 100);
+    this.quadTree = new QuadTree(0, 0, mapWidth, mapHeight, 100000, 100000);
 
     // Insert collision tiles into the QuadTree
     const tileSize = this.tileManager.getMap().tilewidth;

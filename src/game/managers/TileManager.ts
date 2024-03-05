@@ -2,12 +2,18 @@ import * as PIXI from 'pixi.js';
 
 export class TileManager {
   private groundLayer: PIXI.Container;
+  private faunaLayer: PIXI.Container;
   private structureLayer: PIXI.Container;
   private map: any;
   private tilesets: any[] = [];
 
-  constructor(groundLayer: PIXI.Container, structurelayer: PIXI.Container) {
+  constructor(
+    groundLayer: PIXI.Container,
+    faunaLayer: PIXI.Container,
+    structurelayer: PIXI.Container
+  ) {
     this.groundLayer = groundLayer;
+    this.faunaLayer = faunaLayer;
     this.structureLayer = structurelayer;
 
     this.loadAssets();
@@ -15,11 +21,11 @@ export class TileManager {
 
   private loadAssets(): void {
     PIXI.Loader.shared
-      .add('map', '/Backgrounds/Shire/tilesets/Shire.json')
-      .add('RoadJson', '/Backgrounds/Shire/tilesets/Road.json')
-      .add('HobbitHouseJson', '/Backgrounds/Shire/tilesets/HobbitHouse.json')
-      .add('TavernJson', '/Backgrounds/Shire/tilesets/Tavern.json')
-      .add('WaterJson', '/Backgrounds/Shire/tilesets/Water.json')
+      .add('map', '/Levels/GrassLands/jsons/GrassLandsMap.json')
+      .add('DecorJson', '/Levels/GrassLands/jsons/Decor.json')
+      .add('MainJson', '/Levels/GrassLands/jsons/main.json')
+      .add('ShipsJson', '/Levels/GrassLands/jsons/Ships.json')
+      .add('TowersJson', '/Levels/GrassLands/jsons/Towers.json')
       .load(this.setup.bind(this));
   }
 
@@ -30,10 +36,10 @@ export class TileManager {
     // Check if all resources are loaded successfully
     if (
       !resources.map ||
-      !resources.RoadJson ||
-      !resources.HobbitHouseJson ||
-      !resources.TavernJson ||
-      !resources.WaterJson
+      !resources.DecorJson ||
+      !resources.MainJson ||
+      !resources.ShipsJson ||
+      !resources.TowersJson
     ) {
       console.error('Failed to load resources.');
       console.log(loader);
@@ -47,6 +53,7 @@ export class TileManager {
     const tilesets = this.map.tilesets;
     for (const tileset of tilesets) {
       const textureResource = resources[tileset.name];
+      if (textureResource) console.log(textureResource.data);
       if (!textureResource || !textureResource.data.image) {
         console.error(`Failed to load texture for tileset: ${tileset.source}`);
         continue;
@@ -85,7 +92,7 @@ export class TileManager {
             const sprite = new PIXI.Sprite(texture);
             sprite.x = x * tileWidth;
             sprite.y = y * tileHeight;
-            if (gid < 661) {
+            if (gid < 26001) {
               this.groundLayer.addChild(sprite);
             } else {
               this.structureLayer.addChild(sprite);
