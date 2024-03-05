@@ -62,7 +62,7 @@ export class GameManager {
     this.interfaceManager.setPosition(centerX, centerY);
   }
 
-  private playerMotion() {
+  private playerMotion(delta: number) {
     const playerSprite = this.player.getPlayerSprite();
 
     if (
@@ -74,7 +74,7 @@ export class GameManager {
       const prevX = playerSprite.x;
       const prevY = playerSprite.y;
 
-      this.player.handlePlayerMovement();
+      this.player.handlePlayerMovement(delta);
       this.mapManager.adjustMapPosition(playerSprite.x, playerSprite.y);
 
       if (
@@ -94,16 +94,10 @@ export class GameManager {
     this.updateInterfacePosition();
   }
 
-  private checkCharacterPaneToggle() {
-    if (this.inputManager.isKeyPressed('Tab')) {
-      this.interfaceManager.toggleCharacterPane();
-    }
-  }
-
-  private gameLoop(): void {
+  private gameLoop(delta: number): void {
+    console.log(this.app.ticker.FPS);
     this.app.renderer.render(this.app.stage);
-    this.playerMotion();
-    this.checkCharacterPaneToggle();
+    this.playerMotion(delta);
     this.player.update();
     this.interfaceManager.updateStaminaText();
   }

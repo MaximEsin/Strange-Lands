@@ -30,7 +30,7 @@ export class Player {
   private swordUpAnimation: PIXI.Texture[];
   private swordDownAnimation: PIXI.Texture[];
   private swordUltimateAnimation: PIXI.Texture[];
-  private speed: number = 10;
+  private speed: number = 3;
   private isAttackingWithDagger: boolean = false;
   private isAttackingWithSword: boolean = false;
   private swordAttackStaminaCost: number = 5;
@@ -98,7 +98,6 @@ export class Player {
     const player = new PIXI.AnimatedSprite(playerTextures);
     player.x = this.app.screen.width / 2 + 50;
     player.y = this.app.screen.height / 2 + 50;
-    player.scale.set(1.2);
     player.anchor.set(0.5);
     player.animationSpeed = 0.1;
     player.play();
@@ -116,20 +115,20 @@ export class Player {
     }
   }
 
-  private moveUp(): void {
-    this.playerSprite.y -= this.speed;
+  private moveUp(speed: number): void {
+    this.playerSprite.y -= speed;
   }
 
-  private moveDown(): void {
-    this.playerSprite.y += this.speed;
+  private moveDown(speed: number): void {
+    this.playerSprite.y += speed;
   }
 
-  private moveLeft(): void {
-    this.playerSprite.x -= this.speed;
+  private moveLeft(speed: number): void {
+    this.playerSprite.x -= speed;
   }
 
-  private moveRight(): void {
-    this.playerSprite.x += this.speed;
+  private moveRight(speed: number): void {
+    this.playerSprite.x += speed;
   }
 
   private calculateDirection(): string {
@@ -290,11 +289,12 @@ export class Player {
     }
   }
 
-  public handlePlayerMovement(): void {
+  public handlePlayerMovement(delta: number): void {
+    const speed = delta * this.speed;
     const direction = this.calculateDirection();
     // Set the appropriate animation based on the direction and movement
     if (this.inputManager.isKeyPressed('KeyW')) {
-      this.moveUp();
+      this.moveUp(speed);
       if (
         (!this.inputManager.isKeyPressed('KeyA') ||
           !this.inputManager.isKeyPressed('KeyD')) &&
@@ -316,7 +316,7 @@ export class Player {
         }
       }
     } else if (this.inputManager.isKeyPressed('KeyS')) {
-      this.moveDown();
+      this.moveDown(speed);
       if (
         (!this.inputManager.isKeyPressed('KeyA') ||
           !this.inputManager.isKeyPressed('KeyD')) &&
@@ -340,7 +340,7 @@ export class Player {
     }
 
     if (this.inputManager.isKeyPressed('KeyA')) {
-      this.moveLeft();
+      this.moveLeft(speed);
       if (direction === 'right') {
         if (!this.isAttackingWithSword) {
           if (!this.isAttackingWithDagger) {
@@ -355,7 +355,7 @@ export class Player {
         }
       }
     } else if (this.inputManager.isKeyPressed('KeyD')) {
-      this.moveRight();
+      this.moveRight(speed);
       if (direction === 'left') {
         if (!this.isAttackingWithSword) {
           if (!this.isAttackingWithDagger) {
