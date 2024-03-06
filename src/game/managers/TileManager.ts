@@ -53,7 +53,6 @@ export class TileManager {
     const tilesets = this.map.tilesets;
     for (const tileset of tilesets) {
       const textureResource = resources[tileset.name];
-      if (textureResource) console.log(textureResource.data);
       if (!textureResource || !textureResource.data.image) {
         console.error(`Failed to load texture for tileset: ${tileset.source}`);
         continue;

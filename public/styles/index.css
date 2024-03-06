@@ -3,5 +3,113 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  position: relative;
   cursor: url('/UI/cursor.png'), auto;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.pane {
+  position: relative;
+  top: 5%;
+  left: 25%;
+}
+
+.paneImage {
+  z-index: 1;
+}
+
+.name {
+  top: 20%;
+  left: 10%;
+}
+
+.strength {
+  top: 59%;
+  left: 13%;
+}
+
+.health {
+  top: 64%;
+  left: 13%;
+}
+
+.armor-value {
+  top: 69%;
+  left: 13%;
+}
+
+.stamina {
+  top: 74%;
+  left: 13%;
+}
+
+.health-potions {
+  top: 27%;
+  left: 30%;
+}
+
+.stamina-potions {
+  top: 33%;
+  left: 30%;
+}
+
+.coins {
+  top: 39%;
+  left: 30%;
+}
+
+.gear {
+  top: 45%;
+  left: 28%;
+}
+
+.text {
+  position: absolute;
+  z-index: 1;
+  font-family: 'Halvetica';
+  font-size: 16px;
+  font-weight: normal;
+  color: #000000;
+  text-align: center;
+  margin: 0;
+}
+
+#character-pane {
+  top: 5%;
+  left: 25%;
+}
+
+.mini-ui {
+  position: fixed;
+  top: 76%;
+  left: 0%;
+}
+
+.mini-health {
+  top: 15%;
+  left: 40%;
+}
+
+.mini-stamina {
+  top: 35%;
+  left: 40%;
+}
+
+.mini-health-potions {
+  top: 55%;
+  left: 40%;
+}
+
+.mini-stamina-potions {
+  top: 75%;
+  left: 40%;
 }

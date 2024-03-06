@@ -39,7 +39,7 @@ export class GameManager {
       this.faunaLayer,
       this.structureLayer
     );
-    this.interfaceManager = new InterfaceManager(this.app, this.playerData);
+    this.interfaceManager = new InterfaceManager(this.playerData);
     this.eventListenerManager = new EventListenerManager(this.interfaceManager);
     this.player = new Player(
       this.app,
@@ -48,18 +48,6 @@ export class GameManager {
       this.playerData
     );
     this.structureLayer.addChild(this.player.getPlayerSprite());
-
-    this.updateInterfacePosition();
-  }
-
-  private updateInterfacePosition(): void {
-    // Calculate the center of the screen
-    const centerX = this.player.getPlayerSprite().x - this.app.screen.width / 2;
-    const centerY =
-      this.player.getPlayerSprite().y - this.app.screen.height / 2;
-
-    // Update the interface manager's position
-    this.interfaceManager.setPosition(centerX, centerY);
   }
 
   private playerMotion(delta: number) {
@@ -90,8 +78,6 @@ export class GameManager {
     } else {
       this.player.handleStandingAnimation();
     }
-
-    this.updateInterfacePosition();
   }
 
   private gameLoop(delta: number): void {
@@ -99,7 +85,7 @@ export class GameManager {
     this.app.renderer.render(this.app.stage);
     this.playerMotion(delta);
     this.player.update();
-    this.interfaceManager.updateStaminaText();
+    this.interfaceManager.updateUIData();
   }
 
   start() {
